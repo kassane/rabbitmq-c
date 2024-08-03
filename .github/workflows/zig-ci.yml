@@ -1,0 +1,38 @@
+name: Zig-CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: master
+      - name: (Zig) Build
+        run: zig build --summary all -Dexamples -freference-trace
+
+  cross:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targets:
+          - aarch64-linux-gnu
+          - mipsel-linux-musl
+          - aarch64-linux-musl
+          - riscv64-linux-musl
+          - x86_64-linux-musl
+          - x86-linux-musl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: master
+      - name: Build Summary ${{ matrix.targets }}
+        run: zig build --summary all -Dexamples -freference-trace -Dtarget=${{ matrix.targets }}

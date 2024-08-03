@@ -6,7 +6,7 @@
 .libs
 /aclocal.m4
 /autom4te.cache
-/bin*
+/bin
 /build
 /compile
 /config.guess
@@ -75,3 +75,4 @@ tools/doc/man-date.ent
 .cache/
 compile_commands.json
 codegen/
+*zig-*/
